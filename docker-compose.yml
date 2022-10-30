@@ -11,6 +11,15 @@ services:
     ports:
       - '3032:80'
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+
+    volumes:
+      - /app/node_modules
+      - ./backend/:/app
+
   frontend:
     build:
       context: ./frontend
