@@ -23,6 +23,7 @@ export const cartSlice = createSlice({
     removeItem(state, action) {
       const id = action.payload;
       const newItems = state.cartItems.filter((i) => i.product !== id);
+      localStorage.setItem('cartItems', JSON.stringify(newItems));
       state.cartItems = newItems;
     },
   },
