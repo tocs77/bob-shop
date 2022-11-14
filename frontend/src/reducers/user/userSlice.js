@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, logout } from './actions';
+import { login, register, updateDetails } from './actions';
 
 const restoreUserInfoFromStorage = () => {
   try {
@@ -19,7 +19,12 @@ const initialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.userInfo = {};
+      localStorage.setItem('userInfo', '');
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -31,17 +36,27 @@ export const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        console.log('act err', action.error);
         state.error = action.error.message;
       })
-      .addCase(logout.pending, (state) => {
+      .addCase(register.pending, (state) => {
         state.loading = true;
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        state.userInfo = {};
+        state.userInfo = action.payload;
       })
-      .addCase(logout.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(updateDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
@@ -50,4 +65,5 @@ export const userSlice = createSlice({
   },
 });
 
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

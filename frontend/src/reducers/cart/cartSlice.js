@@ -9,10 +9,28 @@ const restoreCartItemsFromStorage = () => {
     return [];
   }
 };
+const restoreShippingAddressFromStorage = () => {
+  try {
+    const itemsStr = localStorage.getItem('shippingAddress');
+    return itemsStr ? JSON.parse(itemsStr) : {};
+  } catch (err) {
+    return {};
+  }
+};
+const restorePaymentMethodFromStorage = () => {
+  try {
+    const itemsStr = localStorage.getItem('paymentMethod');
+    return itemsStr ? JSON.parse(itemsStr) : '';
+  } catch (err) {
+    return '';
+  }
+};
 
 const initialState = {
   cartItems: restoreCartItemsFromStorage(),
+  shippingAddress: restoreShippingAddressFromStorage(),
   loading: false,
+  paymentMethod: restorePaymentMethodFromStorage(),
   error: null,
 };
 
@@ -25,6 +43,14 @@ export const cartSlice = createSlice({
       const newItems = state.cartItems.filter((i) => i.product !== id);
       localStorage.setItem('cartItems', JSON.stringify(newItems));
       state.cartItems = newItems;
+    },
+    updateShippingAddress(state, action) {
+      localStorage.setItem('shippingAddress', JSON.stringify(action.payload));
+      state.shippingAddress = action.payload;
+    },
+    updatePaymentMethod(state, action) {
+      localStorage.setItem('paymentMethod', JSON.stringify(action.payload));
+      state.paymentMethod = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -49,5 +75,5 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { removeItem } = cartSlice.actions;
+export const { removeItem, updateShippingAddress, updatePaymentMethod } = cartSlice.actions;
 export default cartSlice.reducer;
