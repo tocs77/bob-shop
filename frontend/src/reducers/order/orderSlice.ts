@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { createOrder } from './actions';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createOrder, getOrder } from './actions';
 
 import { IOrder } from '../../models';
 
@@ -26,11 +26,22 @@ export const orderSlice = createSlice({
       .addCase(createOrder.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
+      .addCase(createOrder.fulfilled, (state, action: PayloadAction<IOrder>) => {
         state.loading = false;
         state.order = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || false;
+      })
+      .addCase(getOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getOrder.fulfilled, (state, action: PayloadAction<IOrder>) => {
+        state.loading = false;
+        state.order = action.payload;
+      })
+      .addCase(getOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || false;
       })

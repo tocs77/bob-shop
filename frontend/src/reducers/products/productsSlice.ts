@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getProducts, getProductDetails } from './actions';
 
 import { IProduct } from '../../models';
@@ -26,7 +26,7 @@ export const productsSlice = createSlice({
       .addCase(getProducts.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getProducts.fulfilled, (state, action: PayloadAction<IProduct[]>) => {
         state.loading = false;
         state.products = action.payload;
       })
@@ -37,7 +37,7 @@ export const productsSlice = createSlice({
       .addCase(getProductDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getProductDetails.fulfilled, (state, action) => {
+      .addCase(getProductDetails.fulfilled, (state, action: PayloadAction<IProduct>) => {
         state.loading = false;
         state.product = action.payload;
       })

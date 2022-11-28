@@ -51,4 +51,8 @@ export interface IOrder {
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
+  isPaid?: boolean;
+  paidAt?: Date;
+  isDelivered?: boolean;
+  deliveredAt?: Date;
 }

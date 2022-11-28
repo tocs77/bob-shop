@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { addToCart } from './actions';
 
 import { ICartProduct, IShippingAddress } from '../../models';
@@ -48,17 +48,17 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    removeItem(state, action: { type: string; payload: string }) {
+    removeItem(state, action: PayloadAction<string>) {
       const id = action.payload;
       const newItems = state.cartItems.filter((i) => i.product !== id);
       localStorage.setItem('cartItems', JSON.stringify(newItems));
       state.cartItems = newItems;
     },
-    updateShippingAddress(state, action: { type: string; payload: IShippingAddress }) {
+    updateShippingAddress(state, action: PayloadAction<IShippingAddress>) {
       localStorage.setItem('shippingAddress', JSON.stringify(action.payload));
       state.shippingAddress = action.payload;
     },
-    updatePaymentMethod(state, action) {
+    updatePaymentMethod(state, action: PayloadAction<string>) {
       localStorage.setItem('paymentMethod', JSON.stringify(action.payload));
       state.paymentMethod = action.payload;
     },
@@ -68,7 +68,7 @@ export const cartSlice = createSlice({
       .addCase(addToCart.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addToCart.fulfilled, (state, action: { type: string; payload: ICartProduct }) => {
+      .addCase(addToCart.fulfilled, (state, action: PayloadAction<ICartProduct>) => {
         state.loading = false;
         const item = action.payload;
         const newItems = state.cartItems.filter((i) => i.product !== item.product);
